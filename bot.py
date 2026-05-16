@@ -9,4 +9,4 @@ def start(message):
     bot.reply_to(message, "Bot Working ✅")
 
 print("Bot Running...")
-bot.infinity_polling()
+bot.infinity_polling(skip_pending=True, none_stop=True)
