@@ -9,11 +9,50 @@ TOKEN = "8977490017:AAHfXQQVnRfOfBZ8aZfCSRsgHkcGXB97aJ8"
 bot = telebot.TeleBot(TOKEN)
 
 # =========================
-# FORCE JOIN CHANNEL
 # =========================
-CHANNEL_USERNAME = "@Surendraearninghub"
-CHANNEL_LINK = "https://t.me/Surendraearninghub"
+# FORCE JOIN MESSAGE
+# =========================
+def force_join(message):
 
+    markup = types.InlineKeyboardMarkup()
+
+    ch1_btn = types.InlineKeyboardButton(
+        "📢 Channel 1",
+        url="https://t.me/Surendraearninghub"
+    )
+
+    ch2_btn = types.InlineKeyboardButton(
+        "📢 Channel 2",
+        url="https://t.me/surendraquizhub"
+    )
+
+    yt_btn = types.InlineKeyboardButton(
+        "▶️ YouTube",
+        url="https://youtube.com/@gadliofficial?si=V-1AlS7JgAMuFKVM"
+    )
+
+    insta_btn = types.InlineKeyboardButton(
+        "📷 Instagram",
+        url="https://www.instagram.com/gadli_surendra?igsh=MTUzZWZiOGszeTNxMg=="
+    )
+
+    check_btn = types.InlineKeyboardButton(
+        "✅ Verify Joined",
+        callback_data="check_join"
+    )
+
+    markup.add(ch1_btn)
+    markup.add(ch2_btn)
+    markup.add(yt_btn, insta_btn)
+    markup.add(check_btn)
+
+    bot.send_message(
+        message.chat.id,
+        """
+⚠️ पहले नीचे दिए गए सभी चैनल और सोशल मीडिया जॉइन / फॉलो करो फिर Verify पर क्लिक करो।
+        """,
+        reply_markup=markup
+    )
 # =========================
 # START COMMAND
 # =========================
@@ -65,7 +104,7 @@ def force_join(message):
 
 # =========================
 # CHECK JOIN
-# =========================
+# =====================
 @bot.callback_query_handler(func=lambda call: call.data == "check_join")
 def check_join(call):
 
@@ -96,7 +135,6 @@ def check_join(call):
             call.id,
             "⚠️ पहले चैनल जॉइन करो"
         )
-
 # =========================
 # MAIN MENU
 # =========================
