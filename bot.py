@@ -161,3 +161,9 @@ def help_support(message):
         message.chat.id,
         "🆘 Contact Admin:\n\n👤 Admin ID: 8771820206"
     )
+print("Bot Working ✅")
+
+try:
+    bot.infinity_polling(skip_pending=True)
+except Exception as e:
+    print(e)
