@@ -61,19 +61,49 @@ def start(message):
 
     user_id = message.from_user.id
 
-    try:
-        member = bot.get_chat_member(CHANNEL_USERNAME, user_id)
+    markup = types.InlineKeyboardMarkup()
 
-        if member.status in ["member", "administrator", "creator"]:
+    ch1 = types.InlineKeyboardButton(
+        "📢 Channel 1",
+        url="https://t.me/Surendraearninghub"
+    )
 
-            show_main_menu(message)
+    ch2 = types.InlineKeyboardButton(
+        "📢 Channel 2",
+        url="https://t.me/surendraquizhub"
+    )
 
-        else:
-            force_join(message)
+    yt = types.InlineKeyboardButton(
+        "▶️ YouTube",
+        url="https://youtube.com/@gadliofficial?si=V-1AlS7JgAMuFKVM"
+    )
 
-    except:
-        force_join(message)
+    insta = types.InlineKeyboardButton(
+        "📷 Instagram",
+        url="https://www.instagram.com/gadli_surendra?igsh=MTUzZWZiOGszeTNxMg=="
+    )
 
+    verify = types.InlineKeyboardButton(
+        "✅ Verify Joined",
+        callback_data="verify_join"
+    )
+
+    markup.add(ch1)
+    markup.add(ch2)
+    markup.add(yt, insta)
+    markup.add(verify)
+
+    bot.send_message(
+        message.chat.id,
+        f"""
+🔥 Welcome {message.from_user.first_name} 🔥
+
+🎁 Join All Channels & Get ₹45 Bonus
+
+⚠️ पहले सभी चैनल Join करो फिर Verify Joined दबाओ
+        """,
+        reply_markup=markup
+    )
 # =========================
 # FORCE JOIN MESSAGE
 # =========================
@@ -105,35 +135,53 @@ def force_join(message):
 # =========================
 # CHECK JOIN
 # =========================
-@bot.callback_query_handler(func=lambda call: call.data == "check_join")
-def check_join(call):
+# =========================
+# VERIFY JOIN
+# =========================
+@bot.callback_query_handler(func=lambda call: call.data == "verify_join")
+def verify_join(call):
 
     user_id = call.from_user.id
 
     try:
-        member = bot.get_chat_member("@Surendraearninghub", user_id)
+        ch1 = bot.get_chat_member("@Surendraearninghub", user_id)
 
-        if member.status in ["member", "administrator", "creator"]:
+        if ch1.status in ["member", "administrator", "creator"]:
 
-            bot.answer_callback_query(
-                call.id,
-                "✅ Verification Successful"
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+            b1 = types.KeyboardButton("💰 Balance")
+            b2 = types.KeyboardButton("👥 Refer")
+            b3 = types.KeyboardButton("💸 Withdrawal")
+            b4 = types.KeyboardButton("🆘 Help")
+
+            markup.row(b1, b2)
+            markup.row(b3, b4)
+
+            bot.send_message(
+                call.message.chat.id,
+                """
+✅ Verification Successful
+
+🎁 ₹45 Joining Bonus Added
+
+🚀 Bot Activated Successfully
+                """,
+                reply_markup=markup
             )
-
-            show_main_menu(call.message)
 
         else:
 
             bot.answer_callback_query(
                 call.id,
-                "❌ पहले Channel 1 Join करो"
+                "❌ पहले सभी चैनल Join करो"
             )
 
     except:
 
         bot.answer_callback_query(
             call.id,
-            "⚠️ पहले चैनल जॉइन करो"
+            "⚠️ पहले चैनल Join करो"
         )
 # =========================
 # MAIN MENU
@@ -243,18 +291,6 @@ def help_support(message):
 🆘 Support & Help
 
 👤 Admin ID:
-8771820206
-
-📢 Channel:
-https://t.me/Surendraearninghub
-
-▶️ YouTube:
-https://youtube.com/@gadliofficial
-
-📷 Instagram:
-https://www.instagram.com/gadli_surendra
-        """
-    )
 
 # =========================
 # BOT START
