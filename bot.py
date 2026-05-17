@@ -5,7 +5,13 @@ TOKEN = "8894488238:AAFom771RgGEoPb_Wk8jBlxPtIBPW3fu8_g"
 
 bot = telebot.TeleBot(TOKEN)
 # START COMMAND
+# START COMMAND
 @bot.message_handler(commands=['start'])
+def start(message):
+
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+    b1 = types.KeyboardButton("💰 Balance")
 def start(message):
 
     user_id = message.from_user.id
