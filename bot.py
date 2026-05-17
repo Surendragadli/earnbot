@@ -1,169 +1,226 @@
 import telebot
 from telebot import types
 
-TOKEN = "8894488238:AAFom771RgGEoPb_Wk8jBlxPtIBPW3fu8_g"
+# =========================
+# BOT TOKEN
+# =========================
+TOKEN = "8977490017:AAHfXQQVnRfOfBZ8aZfCSRsgHkcGXB97aJ8"
 
 bot = telebot.TeleBot(TOKEN)
+
+# =========================
+# FORCE JOIN CHANNEL
+# =========================
+CHANNEL_USERNAME = "@Surendraearninghub"
+CHANNEL_LINK = "https://t.me/Surendraearninghub"
+
+# =========================
 # START COMMAND
-# START COMMAND
+# =========================
 @bot.message_handler(commands=['start'])
 def start(message):
 
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
-    b1 = types.KeyboardButton("💰 Balance")
-def start(message):
-
     user_id = message.from_user.id
-    channel_username = "@Surendraearninghub"
 
     try:
-        member = bot.get_chat_member(channel_username, user_id)
+        member = bot.get_chat_member(CHANNEL_USERNAME, user_id)
 
         if member.status in ["member", "administrator", "creator"]:
 
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
-            b1 = types.KeyboardButton("💰 Balance")
-            b2 = types.KeyboardButton("👥 Refer")
-            b3 = types.KeyboardButton("💸 Withdrawal")
-            b4 = types.KeyboardButton("🆘 Help")
-
-            markup.row(b1, b2)
-            markup.row(b3, b4)
-
-            bot.send_message(
-                message.chat.id,
-                f"🔥 Welcome {message.from_user.first_name} 🔥\n\nEarn With Gadli Bot Working ✅",
-                reply_markup=markup
-            )
+            show_main_menu(message)
 
         else:
-            raise Exception()
+            force_join(message)
 
     except:
+        force_join(message)
 
-        join_markup = types.InlineKeyboardMarkup()
+# =========================
+# FORCE JOIN MESSAGE
+# =========================
+def force_join(message):
 
-        join_btn = types.InlineKeyboardButton(
-            "📢 Join Channel",
-            url="https://t.me/Surendraearninghub"
-        )
+    markup = types.InlineKeyboardMarkup()
 
-        check_btn = types.InlineKeyboardButton(
-            "✅ Joined",
-            callback_data="check_join"
-        )
+    join_btn = types.InlineKeyboardButton(
+        "📢 Join Channel",
+        url=CHANNEL_LINK
+    )
 
-        join_markup.add(join_btn)
-        join_markup.add(check_btn)
+    check_btn = types.InlineKeyboardButton(
+        "✅ Joined",
+        callback_data="check_join"
+    )
 
-        bot.send_message(
-            message.chat.id,
-            "⚠️ पहले हमारा चैनल जॉइन करो फिर बोट यूज़ करो",
-            reply_markup=join_markup
-        )
+    markup.add(join_btn)
+    markup.add(check_btn)
 
+    bot.send_message(
+        message.chat.id,
+        """
+⚠️ पहले हमारा चैनल जॉइन करो फिर बोट इस्तेमाल करो।
+        """,
+        reply_markup=markup
+    )
 
+# =========================
+# CHECK JOIN
+# =========================
 @bot.callback_query_handler(func=lambda call: call.data == "check_join")
 def check_join(call):
 
     user_id = call.from_user.id
-    channel_username = "@Surendraearninghub"
 
     try:
-        member = bot.get_chat_member(channel_username, user_id)
+        member = bot.get_chat_member(CHANNEL_USERNAME, user_id)
 
         if member.status in ["member", "administrator", "creator"]:
 
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
-            b1 = types.KeyboardButton("💰 Balance")
-            b2 = types.KeyboardButton("👥 Refer")
-            b3 = types.KeyboardButton("💸 Withdrawal")
-            b4 = types.KeyboardButton("🆘 Help")
-
-            markup.row(b1, b2)
-            markup.row(b3, b4)
-
-            bot.send_message(
-                call.message.chat.id,
-                "✅ Verification Successful\n\nBot Started Successfully",
-                reply_markup=markup
+            bot.answer_callback_query(
+                call.id,
+                "✅ Verification Successful"
             )
 
+            show_main_menu(call.message)
+
         else:
+
             bot.answer_callback_query(
                 call.id,
                 "❌ पहले चैनल जॉइन करो"
             )
 
     except:
+
         bot.answer_callback_query(
             call.id,
-            "❌ पहले चैनल जॉइन करो"
+            "⚠️ पहले चैनल जॉइन करो"
         )
 
+# =========================
+# MAIN MENU
+# =========================
+def show_main_menu(message):
 
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+    b1 = types.KeyboardButton("💰 Balance")
+    b2 = types.KeyboardButton("👥 Refer")
+
+    b3 = types.KeyboardButton("💸 Withdrawal")
+    b4 = types.KeyboardButton("🆘 Help")
+
+    markup.row(b1, b2)
+    markup.row(b3, b4)
+
+    bot.send_message(
+        message.chat.id,
+        f"""
+🔥 Welcome {message.from_user.first_name} 🔥
+
+💸 Earn With Sandeep Bot 💸
+
+✅ Refer & Earn
+✅ Daily Updates
+✅ Withdrawal System
+
+🎉 Bot Successfully Started
+        """,
+        reply_markup=markup
+    )
+
+# =========================
 # BALANCE
+# =========================
 @bot.message_handler(func=lambda message: message.text == "💰 Balance")
 def balance(message):
-    bot.send_message(message.chat.id, "💰 Your Balance: ₹0")
 
+    bot.send_message(
+        message.chat.id,
+        """
+💰 Your Balance
 
+₹0
+        """
+    )
+
+# =========================
 # REFER
+# =========================
 @bot.message_handler(func=lambda message: message.text == "👥 Refer")
 def refer(message):
 
     user_id = message.from_user.id
 
-    ref_link = f"https://t.me/Earnwithgadli_bot?start={user_id}"
+    bot_username = bot.get_me().username
 
-    text = f"""
+    ref_link = f"https://t.me/{bot_username}?start={user_id}"
+
+    bot.send_message(
+        message.chat.id,
+        f"""
 👥 Your Referral Link:
 
 {ref_link}
 
-🔥 Earn With Gadli 🔥
-💸 Daily Earn & Referral Bonus
-⚡ Instant Updates
-📈 Grow With Gadli
+🔥 Invite Friends & Earn More
 
-📢 Channel 1:
-https://t.me/Surendraearninghub
-
-📢 Channel 2:
-https://t.me/surendraquizhub
+📢 Channel:
+{CHANNEL_LINK}
 
 ▶️ YouTube:
 https://youtube.com/@gadliofficial?si=V-1AlS7JgAMuFKVM
 
 📷 Instagram:
-https://www.instagram.com/gadli_surendra?igsh=MTUzZWZiOGszeTNxMg==
-"""
+https://www.instagram.com/gadli_surendra
+        """
+    )
 
-    bot.send_message(message.chat.id, text)
-
-
+# =========================
 # WITHDRAWAL
+# =========================
 @bot.message_handler(func=lambda message: message.text == "💸 Withdrawal")
 def withdrawal(message):
+
     bot.send_message(
         message.chat.id,
-        "💸 Minimum withdrawal ₹100"
+        """
+💸 Withdrawal Information
+
+✅ Minimum Withdrawal: ₹100
+
+📝 Contact Admin After Completing Target
+        """
     )
 
-
+# =========================
 # HELP
+# =========================
 @bot.message_handler(func=lambda message: message.text == "🆘 Help")
 def help_support(message):
+
     bot.send_message(
         message.chat.id,
-        "🆘 Contact Admin:\n\n👤 Admin ID: 8771820206"
-    )
-print("Bot Working ✅")
+        """
+🆘 Support & Help
 
-try:
-    bot.infinity_polling(skip_pending=True)
-except Exception as e:
-    print(e)
+👤 Admin ID:
+8771820206
+
+📢 Channel:
+https://t.me/Surendraearninghub
+
+▶️ YouTube:
+https://youtube.com/@gadliofficial
+
+📷 Instagram:
+https://www.instagram.com/gadli_surendra
+        """
+    )
+
+# =========================
+# BOT START
+# =========================
+print("Bot Running Successfully ✅")
+
+bot.infinity_polling(skip_pending=True)
