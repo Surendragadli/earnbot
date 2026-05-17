@@ -104,14 +104,14 @@ def force_join(message):
 
 # =========================
 # CHECK JOIN
-# =====================
+# =========================
 @bot.callback_query_handler(func=lambda call: call.data == "check_join")
 def check_join(call):
 
     user_id = call.from_user.id
 
     try:
-        member = bot.get_chat_member(CHANNEL_USERNAME, user_id)
+        member = bot.get_chat_member("@Surendraearninghub", user_id)
 
         if member.status in ["member", "administrator", "creator"]:
 
@@ -126,7 +126,7 @@ def check_join(call):
 
             bot.answer_callback_query(
                 call.id,
-                "❌ पहले चैनल जॉइन करो"
+                "❌ पहले Channel 1 Join करो"
             )
 
     except:
